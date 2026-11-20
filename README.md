@@ -123,7 +123,7 @@ For every paid API request the agent runs:
 
 *(Best use of Arc requirement)*
 
-- **Contract:** `KillSwitchVault` on **Arc Testnet** (chain 5042002). **Address: `FILL_IN_AFTER_DEPLOY`** · [Arcscan](https://testnet.arcscan.app)
+- **Contract:** `KillSwitchVault` on **Arc Testnet** (chain 5042002). **Address: [`0xAC5e2D8D4dE5673424557761f9ebf2b3283b48DC`](https://testnet.arcscan.app/address/0xAC5e2D8D4dE5673424557761f9ebf2b3283b48DC)**
 - **USDC:** Arc's USDC ERC-20 interface `0x3600000000000000000000000000000000000000` (6 decimals) is the asset in every mandate.
 - **USDC as gas:** every actor (owner, agent, merchant) pays gas in USDC. A merchant's *blocked* attempt costs it a predictable, dollar-denominated fee, and the user never needs a second token. `npm run setup` funds gas with plain native-USDC transfers.
 - **Sub-second finality:** a held charge → voice alert → spoken "approve" → settled loop feels instant, and x402 per-request payments settle fast enough to sit inside an HTTP request/retry.

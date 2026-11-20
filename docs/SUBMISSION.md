@@ -6,8 +6,8 @@
 **Chain award:** Best use of Arc
 **Bounties:** QuickNode Streams, ElevenLabs
 **Team:** _(add names)_
-**Repo:** _(GitHub URL)_ · **Demo video:** _(YouTube / Drive link, 2–3 min, set to "anyone with the link")_
-**Contract (Arc Testnet):** `KillSwitchVault` at `0x…` _(fill in after deploy)_
+**Repo:** https://github.com/mkupp1874/killswitch · **Demo video:** _(YouTube / Drive link, 2–3 min, set to "anyone with the link")_
+**Contract (Arc Testnet):** `KillSwitchVault` at [`0xAC5e2D8D4dE5673424557761f9ebf2b3283b48DC`](https://testnet.arcscan.app/address/0xAC5e2D8D4dE5673424557761f9ebf2b3283b48DC)
 
 ---
 
