@@ -22,7 +22,7 @@ function broadcast(type, data) {
 
 let cache = { at: 0, state: null };
 async function getState(fresh = false) {
-  if (!fresh && cache.state && Date.now() - cache.at < 1000) return cache.state;
+  if (!fresh && cache.state && Date.now() - cache.at < 3000) return cache.state;
   cache = { at: Date.now(), state: await readState() };
   return cache.state;
 }

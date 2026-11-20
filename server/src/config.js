@@ -20,7 +20,7 @@ export const config = {
     explorer: process.env.EXPLORER_URL || 'https://testnet.arcscan.app',
     usdc: process.env.USDC_ADDRESS || '0x3600000000000000000000000000000000000000',
     vault: process.env.VAULT_ADDRESS,
-    pollMs: num(process.env.POLL_LOGS_MS, 2000),
+    pollMs: num(process.env.POLL_LOGS_MS, 4000),
   },
 
   keys: {

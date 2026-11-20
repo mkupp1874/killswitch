@@ -123,7 +123,7 @@ export function startPoller(hub, { intervalMs }) {
     while (!stopped) {
       try {
         const head = await publicClient.getBlockNumber();
-        if (from === null) from = head > 2000n ? head - 2000n : 0n; // short backfill on boot
+        if (from === null) from = head > 500n ? head - 500n : 0n; // short backfill on boot
         if (head >= from) {
           const logs = await publicClient.getLogs({ address: vaultAddress(), fromBlock: from, toBlock: head });
           for (const l of logs) hub.ingestLog(l, SOURCES.POLLER);

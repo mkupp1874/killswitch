@@ -32,7 +32,9 @@ export const chain = defineChain({
   blockExplorers: { default: { name: 'Arcscan', url: config.chain.explorer } },
 });
 
-export const publicClient = createPublicClient({ chain, transport: http(config.chain.rpcUrl) });
+// Public RPCs rate-limit (HTTP 429). Batch JSON-RPC calls into one request and back off on errors.
+const transport = () => http(config.chain.rpcUrl, { batch: { wait: 20 }, retryCount: 6, retryDelay: 400 });
+export const publicClient = createPublicClient({ chain, transport: transport() });
 
 const wallets = {};
 export function wallet(role) {
@@ -40,7 +42,7 @@ export function wallet(role) {
   const key = config.keys[role];
   if (!key) throw new Error(`Missing private key for "${role}" (see .env.example)`);
   const account = privateKeyToAccount(key);
-  wallets[role] = createWalletClient({ account, chain, transport: http(config.chain.rpcUrl) });
+  wallets[role] = createWalletClient({ account, chain, transport: transport() });
   return wallets[role];
 }
 export const addressOf = (role) => (config.keys[role] ? privateKeyToAccount(config.keys[role]).address : null);
@@ -78,7 +80,13 @@ export function decodeVaultLogs(logs) {
 
 const read = (functionName, args = []) => publicClient.readContract({ address: vaultAddress(), abi: VAULT_ABI, functionName, args });
 
-export async function readState() {
+let inflight = null;
+export function readState() {
+  inflight ??= readStateOnce().finally(() => (inflight = null));
+  return inflight;
+}
+
+async function readStateOnce() {
   const [balance, mCount, pCount, owner, agent, agentCap] = await Promise.all([
     read('balance'),
     read('mandateCount'),
