@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KillSwitch: a spending firewall for you and your AI agents</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23ff3b30'/><rect x='14' y='6' width='4' height='12' rx='2' fill='white'/><path d='M10 11a9 9 0 1 0 12 0' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/></svg>" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><rect x="14" y="5" width="4" height="13" rx="2" /><path d="M9.5 10.5a10 10 0 1 0 13 0" /></svg></div>
+      <div>
+        <h1>KillSwitch</h1>
+        <p class="tag">Give subscriptions and AI agents a leash, not your card.</p>
+      </div>
+    </div>
+    <div class="wallet">
+      <span class="label">Wallet</span>
+      <span id="balance" class="balance">$—</span>
+      <button id="receiptsBtn" class="ghost small" title="Show on-chain details">Receipts</button>
+    </div>
+  </header>
+
+  <div id="chips" class="chips"></div>
+
+  <main class="grid">
+    <!-- Permissions -->
+    <section class="col">
+      <div class="col-head">
+        <h2>Permissions</h2>
+        <button id="newBtn" class="ghost small">+ New</button>
+      </div>
+      <form id="newForm" class="card form hidden">
+        <label>Who can charge you
+          <select name="merchantKey">
+            <option value="cloudtool">CloudTool (SaaS)</option>
+            <option value="weather">WeatherAPI (x402, agent pays)</option>
+          </select>
+        </label>
+        <label>Name <input name="label" value="CloudTool trial" maxlength="60" /></label>
+        <div class="row">
+          <label>Max per charge <input name="capPerChargeUsd" type="number" step="0.01" value="15" /></label>
+          <label>Total limit <input name="totalCapUsd" type="number" step="0.01" value="15" /></label>
+        </div>
+        <div class="row">
+          <label>Ask me above <input name="askAboveUsd" type="number" step="0.01" value="10" /></label>
+          <label>Expires in
+            <select name="expiresInSec">
+              <option value="120">2 minutes (demo)</option>
+              <option value="300">5 minutes (demo)</option>
+              <option value="86400">1 day</option>
+              <option value="604800" selected>7 days</option>
+              <option value="2592000">30 days</option>
+            </select>
+          </label>
+        </div>
+        <label class="check"><input type="checkbox" name="agentCanPay" /> My AI agent may pay this merchant</label>
+        <button class="primary" type="submit">Grant permission</button>
+      </form>
+      <div id="mandates"></div>
+    </section>
+
+    <!-- Live -->
+    <section class="col wide">
+      <div class="col-head">
+        <h2>Live</h2>
+        <div class="voicebar">
+          <form id="cmdForm"><input id="cmdInput" placeholder='Type or hold the mic: "approve", "kill it"' /></form>
+          <button id="micBtn" class="mic" title="Hold to talk">
+            <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3" /></svg>
+          </button>
+        </div>
+      </div>
+      <div id="heard" class="heard hidden"></div>
+      <div id="alerts"></div>
+      <h3 class="sub">Activity</h3>
+      <ul id="feed" class="feed"></ul>
+    </section>
+
+    <!-- Agent + demo -->
+    <section class="col">
+      <div class="col-head"><h2>AI agent</h2><span id="agentState" class="pill idle">idle</span></div>
+      <div class="card">
+        <p class="muted">A research agent buys forecasts from an <b>x402</b> API, a cent per call, inside the budget it was given.</p>
+        <div class="btns">
+          <button data-agent="normal" class="primary">Run research task</button>
+          <button data-agent="spike">API hikes price 25×</button>
+          <button data-agent="compromised" class="danger-outline" title="Simulates a prompt-injected agent that skips its own checks">Hijacked agent</button>
+        </div>
+        <ol id="agentLog" class="agentlog"></ol>
+      </div>
+
+      <div class="col-head"><h2>Merchant simulator</h2></div>
+      <div class="card">
+        <p class="muted"><b>CloudTool</b> tries to charge your trial permission.</p>
+        <div class="btns">
+          <button data-charge="12" data-memo="First month">Charge $12 (ask first)</button>
+          <button data-charge="3" data-memo="Usage">Charge $3 usage</button>
+          <button data-charge="29" data-memo="Pro plan renewal" class="danger-outline">Surprise $29 renewal</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="receipts" class="drawer hidden">
+    <div class="drawer-head"><h2>Receipts &amp; audit log</h2><button id="closeReceipts" class="ghost small">Close</button></div>
+    <div id="receiptsBody"></div>
+  </aside>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
